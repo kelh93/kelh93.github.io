@@ -1,0 +1,552 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="ryan.ke">
+  <meta name="keywords" content="">
+  <title>岛屿类问题深度优先遍历框架 - Kelinghong&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"^-^","loop":false},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Ke's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/default_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="岛屿类问题深度优先遍历框架">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-12-14 00:05" pubdate>
+        2020年12月14日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      552 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      8
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">岛屿类问题深度优先遍历框架</h1>
+            
+            <div class="markdown-body">
+              <h1 id="岛屿类问题-DFS遍历框架"><a href="#岛屿类问题-DFS遍历框架" class="headerlink" title="岛屿类问题 DFS遍历框架"></a>岛屿类问题 DFS遍历框架</h1><h2 id="遍历要点"><a href="#遍历要点" class="headerlink" title="遍历要点"></a>遍历要点</h2><ol>
+<li><p>访问相邻节点;上下左右.假设当前位置为 (r,c);  </p>
+<p> 上节点坐标(r-1,c)<br> 下节点坐标(r+1,c)<br> 左节点坐标(r,c-1)<br> 右节点坐标(r,c+1)  </p>
+ <br />
+ ![1-1](island.png)
+
+</li>
+</ol>
+<hr>
+<ol start="2">
+<li><p>边界</p>
+<blockquote>
+<p>row不能超过 <code>grid.length</code>. col不能超过<code>grid[0].length</code></p>
+</blockquote>
+</li>
+<li><p>代码</p>
+<pre><code class="hljs js"><span class="hljs-comment">/* LeetCode200</span>
+<span class="hljs-comment">    * 思路: 把grid想象成r x c的网格,使用双层遍历.依次遍历所有的节点.</span>
+<span class="hljs-comment">      当从第一个发现的陆地(1)开始深度遍历,污染他的上下左右.直到没有连接为止.</span>
+<span class="hljs-comment">      因为发现一个就会暴露一块岛屿的位置,所有在遍历过程中,发现几次就说明存在</span>
+<span class="hljs-comment">      几个岛屿.</span>
+<span class="hljs-comment">      发现的条件 grid[r][c] = 1.</span>
+<span class="hljs-comment">      为了避免重复将已经遍历过的陆地(1)进行修改grid[r][c] = 2;</span>
+<span class="hljs-comment">      最后 numsIslands 的次数就是岛屿的个数.</span>
+<span class="hljs-comment">      核心代码: </span>
+<span class="hljs-comment">        1. 发现陆地grid[r][c]=1,进行深度遍历,查找他的上下左右节点是否存在相连接的陆地.</span>
+<span class="hljs-comment">        2. 统计数 numsIsland 增加.</span>
+<span class="hljs-comment">        2. 将已经污染过的陆地进行着色 grid[r][c] = 2;</span>
+<span class="hljs-comment">        3. 遍历结束,返回 numsIsland.</span>
+<span class="hljs-comment">    */</span>
+    <span class="hljs-keyword">var</span> grid = [
+        [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+        [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+        [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+        [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+        [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+        [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]
+    ];
+
+    
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">gridDfs</span>(<span class="hljs-params">grid, r, c</span>)</span>&#123;
+        <span class="hljs-keyword">let</span> row = grid.length;
+        <span class="hljs-keyword">let</span> nc = grid[<span class="hljs-number">0</span>].length;
+
+        grid[r][c] = <span class="hljs-number">2</span>; <span class="hljs-comment">// 已经遍历过的</span>
+
+        <span class="hljs-keyword">if</span>(r - <span class="hljs-number">1</span> &gt;= <span class="hljs-number">0</span> &amp;&amp; grid[r-<span class="hljs-number">1</span>][c] == <span class="hljs-number">1</span>)&#123;
+            gridDfs(grid, r-<span class="hljs-number">1</span>, c);
+        &#125;
+        <span class="hljs-keyword">if</span> (r + <span class="hljs-number">1</span> &lt; row &amp;&amp; grid[r+<span class="hljs-number">1</span>][c] == <span class="hljs-number">1</span>)&#123;
+            gridDfs(grid, r+<span class="hljs-number">1</span>, c);
+        &#125;
+        <span class="hljs-keyword">if</span>(c - <span class="hljs-number">1</span> &gt;= <span class="hljs-number">0</span> &amp;&amp; grid[r][c-<span class="hljs-number">1</span>] == <span class="hljs-number">1</span>)&#123;
+            gridDfs(grid, r, c-<span class="hljs-number">1</span>);
+        &#125;
+        <span class="hljs-keyword">if</span>(c + <span class="hljs-number">1</span> &lt; nc &amp;&amp; grid[r][c+<span class="hljs-number">1</span>] == <span class="hljs-number">1</span>)&#123;
+            gridDfs(grid, r, c+<span class="hljs-number">1</span>);
+        &#125;
+    &#125;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isArea</span>(<span class="hljs-params">r, c</span>)</span>&#123;
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> &lt;= r &amp;&amp; r &lt; grid.length &amp;&amp; c &gt;= <span class="hljs-number">0</span> &amp;&amp; c &lt; grid[<span class="hljs-number">0</span>].length;
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">numsIsland</span>(<span class="hljs-params">grid</span>)</span>&#123;
+        <span class="hljs-keyword">let</span> row = grid.length;
+        <span class="hljs-keyword">if</span>(row.length == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">let</span> col = grid[<span class="hljs-number">0</span>].length;
+        <span class="hljs-keyword">let</span> num_islands = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> r = <span class="hljs-number">0</span>; r &lt; row; ++r) &#123;
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> c = <span class="hljs-number">0</span>; c &lt; col; ++c) &#123;
+                <span class="hljs-keyword">if</span> (grid[r][c] == <span class="hljs-number">1</span>) &#123; <span class="hljs-comment">// 找到陆地才会进入循环.直到未找到陆地则会退出dfs</span>
+                    ++num_islands;
+                    gridDfs(grid, r, c);
+                &#125;
+            &#125;
+        &#125;
+        <span class="hljs-keyword">return</span> num_islands;
+    &#125;
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;grid&#x27;</span>, numsIsland(grid));</code></pre></li>
+</ol>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Leetcode/">Leetcode</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%B2%9B%E5%B1%BF%E9%97%AE%E9%A2%98/">岛屿问题</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Leetcode/">Leetcode</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/12/14/Stack/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">栈</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/12/14/Queue/">
+                        <span class="hidden-mobile">队列</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="http://www.kelinghong.com" target="_blank" rel="nofollow noopener"><span>Ryan.ke</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/kelh93" target="_blank" rel="nofollow noopener"><span>GitHub</span></a> 
+  </div>
+  
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <a href="http://beian.miit.gov.cn/" target="_blank"
+       rel="nofollow noopener">网站备案</a>
+    
+      
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=2020127833"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" alt="police-icon"/>
+          
+          <span>粤ICP备2020127833号</span>
+        </a>
+      
+    
+  </div>
+
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.start()
+    document.addEventListener('DOMContentLoaded', function() {
+      window.NProgress && window.NProgress.inc();
+    })
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

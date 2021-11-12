@@ -181,23 +181,33 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2021/11/12/nodejs-start/"></a>
+        <a href="/2020/12/14/Queue-Island/">岛屿类问题深度优先遍历框架</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2021/11/12/nodejs-start/">
+        <a href="/2020/12/14/Queue-Island/">
           
           
             
           
-          NodeJs系列之开篇nodejs系列分几大板块从浅到深学习nodejs
+          岛屿类问题 DFS遍历框架遍历要点
+访问相邻节点;上下左右.假设当前位置为 (r,c);  
+ 上节点坐标(r-1,c) 下节点坐标(r+1,c) 左节点坐标(r,c-1) 右节点坐标(r,c+1)  
+ 
+ ![1-1](island.png)
 
-(一)nodejs的模块化机制
-(二)nodejs中的EventLoop
-(三)nodejs核心模块
-(四)手写koa
 
 
+
+
+边界
+
+row不能超过 grid.length. col不能超过grid[0].length
+
+
+代码
+/* LeetCode200
+    
         </a>
       </p>
 
@@ -205,377 +215,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-11-12 10:10" pubdate>
-              2021-11-12
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/03/14/ast-webpack/">基于AST实现一个简易的webpack</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/03/14/ast-webpack/">
-          
-          
-            
-          
-          学习目标
-了解webpack如何实现commonjs规范。
-分析webpack打包后生成的文件
-基于AST实现webpack打包js文件。  
-运行环境：nodejs：v10.15.3webpack：4.26.0webpack-cli： 3.3.12  
-
-分析webpack打包结果打包的结果是一个闭包，参数就是模块的依赖对象（也可以是数组），key为文件的路径，value是一个function,
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-03-14 07:24" pubdate>
-              2021-03-14
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">前端工程化</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/webpack4-%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96-webpack/">webpack4 前端工程化 webpack</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/02/19/webpack4vswebpack5/">从dist分析webpack4与webpack5</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/02/19/webpack4vswebpack5/">
-          
-          
-            
-          
-          源代码传送门  
-webpack5其实很早就更新了，现在webpack官网已经V5.22.0。今天主要是要对比下webpack4打包出来的结果和webpack5有什么差别，以--mode deveplopment为例。从webpack4开始，其实就不需要webpack.config.js也可以进行打包。它会自动从src目录找到index.js作为入口文件。  
-先写一个简单的index.js
-
-w
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-02-19 13:03" pubdate>
-              2021-02-19
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">前端工程化</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/webpack/">webpack</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/01/15/function-overloading/">如何实现函数重载</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/01/15/function-overloading/">
-          
-          
-            
-          
-          什么是函数重载？  函数的重载指的是一组具有相同名称的函数，不同参数列表的方法。
-
-javascript本身是不支持函数重载的，同名函数的后一个会覆盖前一个。考虑以下例子：
-
-function sum(num)&#123;
-  return num + 1;
-&#125;
-function sum(num)&#123;
-  return num + 2;
-&#125;
-var result = s
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-01-15 05:32" pubdate>
-              2021-01-15
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Javascript%E5%9F%BA%E7%A1%80/">Javascript基础</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/12/24/Graph/">图和图算法</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/12/24/Graph/">
-          
-          
-            
-          
-          图
-图的定义图由边的集合及顶点的集合组成。顶点也有权重，也称为成本。如果一个图的顶点是有序的，则可以称之为有向图。在对有向图的顶点对排序后，便可以在两个顶点之间绘制一个箭头。有向图表明了顶点的流向。如果图是无序的，则称之为无序图或无向图。
-
-图中的一系列顶点构成路径，路径中的所有顶点都由边连接。
-
-路径的长度用路径中第一个顶点到最后一个顶点之间的边的数量表示。
-
-由指向自身的顶点组成的路径称为环，
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-12-24 00:43" pubdate>
-              2020-12-24
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/12/20/BST/">二叉树</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/12/20/BST/">
-          
-          
-            
-          
-          二叉树二叉树的子节点不超过2个。
-
-树是计算机科学中经常用到的一种数据结构。  
-树是一种非线性的数据结构，以分层的方式存储数据。  
-树被用来存储具有层级结构的数据。
-二叉树添加、删除、查找都非常快。
-
-定义树是由一组以边连接的节点组成。
-
-根节点： 一颗树最上面的节点称为根节点。
-父节点：如果一个节点下面连接很多个节点，那么这个节点称为下面节点的父节点，下面的节点称为这个节点的子节点。
-叶子节
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-12-20 00:56" pubdate>
-              2020-12-20
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/12/14/set/">集合（Set）</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/12/14/set/">
-          
-          
-            
-          
-          集合定义集合是由一组无序但彼此之间又有一定相关性的成员组成的，每个成员在集合中只能出现一次。  
-
-不包含任何成员的集合称为空集，全集则是包含一切可能成员的集合。
-如果两个集合的成员完全相同，则称这两个集合相等。
-如果一个集合中所有的成员都属于另外一个集合，则前一个集合称为后一个集合的子集。
-
-集合的操作跟数学上集合的操作一样。
-
-并集将两个集合的成员进行合并，得到一个新的集合。
-交集两个集合中共
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-12-14 01:31" pubdate>
-              2020-12-14
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/12/14/leetcode-206/">反转链表</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/12/14/leetcode-206/">
-          
-          
-            
-          
-          反转链表LeetCode 206反转一个单链表。示例:
-输入: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL
-输出: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL
-进阶:你可以迭代或递归地反转链表。你能否用两种方法解决这道题？
-方法1：双指针
-prev、cur
-prev记录前一个位置，prev总是在cur的后面。
-依次实现局部反转。// 核心代码
-w
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-12-14 00:20" pubdate>
+            <time datetime="2020-12-14 00:05" pubdate>
               2020-12-14
             </time>
           </div>
@@ -592,6 +232,10 @@ w
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+            
+              <a href="/tags/%E5%B2%9B%E5%B1%BF%E9%97%AE%E9%A2%98/">岛屿问题</a>
+            
               <a href="/tags/Leetcode/">Leetcode</a>
             
           </div>
@@ -606,23 +250,25 @@ w
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2020/12/14/list/">列表</a>
+        <a href="/2020/12/14/Queue/">队列</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/12/14/list/">
+        <a href="/2020/12/14/Queue/">
           
           
             
           
-          列表关键概念： 列表是一组有序的数据。每个列表中的数据项称为元素。没有任何元素的列表称为空列表。注意:
+          队列特点: FIFO, 先进先出.
+优先队列不按照先进先出的顺序,而是按照优先级排列. 比如医院急诊科,按照病人的紧急程度进行排列.
+主要操作:
+入队
+出队
 
-列表元素不能太多,否则内存吃不消。
-不需要很长序列查找元素或排序。
-
-列表的代码实现核心方法和属性:    1. 列表长度-size.    2. 添加元素.    3. 删除元素.    4. 插入元素.    5. 查找元素.
-function List()&#123;
-    this.
+队列代码实现function Queue()&#123;
+  this.dataStore = []; // 队列初始数据
+  this.enqueue = enqueue; // 入队
+  this.dequeue = dequeue; 
         </a>
       </p>
 
@@ -630,7 +276,7 @@ function List()&#123;
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2020-12-14 00:17" pubdate>
+            <time datetime="2020-12-14 00:04" pubdate>
               2020-12-14
             </time>
           </div>
@@ -661,30 +307,23 @@ function List()&#123;
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2020/12/14/Stack/">栈</a>
+        <a href="/2020/12/14/hashTable/">散列表（HashTable）</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/12/14/Stack/">
+        <a href="/2020/12/14/hashTable/">
           
           
             
           
-          栈概念
-栈是一种特殊的列表。
-栈是一种高效的数据结构，因为数据只能在栈顶删除或添加,操作很快。 就像洗碗的时候放盘子。
+          散列
+散列是一种常用的数据存储结构，散列后的数据可以快速的插入、删除和取用。 
+散列使用的数据结构叫做散列表。
+散列的查找效率很低。总上描述，散列的特点有点类似于链表。
 
-特点
-栈内元素只能通过列表的一端访问,这一端成为栈顶.
-LIFO (last in first out)
-操作新元素又称作 进栈,入栈或压栈.从一个栈删除元素又称作出栈或退栈.
-
-方法
-入栈
-出栈
-栈顶
-
-栈代码实现核心方法:    1. 使用数组存储数据.    2. 定义一
+概览
+散列表存储数据时，通过一个散列函数将键映射为一个数字，这个数字的范围是0-散列表的长度。
+理想情况下，散列函数会将每个键值映射为一个唯一的数组索引，然而，键的数量是无限的，数组的长度是有限的。两个键映射成同一个值的现象称为
         </a>
       </p>
 
@@ -692,8 +331,187 @@ LIFO (last in first out)
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2020-12-14 00:08" pubdate>
+            <time datetime="2020-12-14 00:01" pubdate>
               2020-12-14
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/12/14/Dictionary/">字典</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/12/14/Dictionary/">
+          
+          
+            
+          
+          字典
+字典是一种以键值对形式存储数据的数据结构。
+JavaScript中的Object类就是以字典的形式设计的。
+
+字典的实现// 定义字典类
+// 字典类的基础是Array类，而不是Object类。
+function Dictionary()&#123;
+  this.dataStore = new Array(); //使用array是为了让其可以遍历
+  this.add = add;
+  
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-12-14 00:01" pubdate>
+              2020-12-14
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/12/11/linkedlist/">链表</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/12/11/linkedlist/">
+          
+          
+            
+          
+          链表数组的缺点
+添加和删除比较麻烦, 因为添加或删除之后,最坏的情况下所有元素的下标都会发生变化.
+js中的数组是使用对象实现的,与其他语言相比,效率很低.
+
+数组的优点
+随机访问.只要给定下标就可以找到. 所有查找算是数组的优点.
+
+链表
+添加、删除快。
+查找慢，每个都要从头开始查找。
+
+链表的概念链表是由一组节点组成的集合。每个节点都使用一个对象的引用指向它的后继。指向另一个节点的引用叫做链。
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-12-11 01:22" pubdate>
+              2020-12-11
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/12/08/js-algorithm/">常见的数据结构</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/12/08/js-algorithm/">
+          
+          
+            
+          
+          作为前端开发,在日常工作中主要处理的都是产品的展示,接触最多的是UI库,比较少用到数据结构与算法,但是在编程中,更多的了解和学习数据结构与算法对我们的编码和处理性能问题提供保障.笔者写这个专题旨在记录自己的学习过程和总结.
+常见的数据结构
+列表
+栈
+队列
+链表
+单链表
+双链表
+
+
+二叉树
+图
+
+列表的实现使用Array实现列表
+function List()&#123;
+    this.data
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-12-08 14:26" pubdate>
+              2020-12-08
             </time>
           </div>
         
@@ -721,7 +539,7 @@ LIFO (last in first out)
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
     </span>
   </nav>
   

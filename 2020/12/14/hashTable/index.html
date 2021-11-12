@@ -1,0 +1,635 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="ryan.ke">
+  <meta name="keywords" content="">
+  <title>散列表（HashTable） - Kelinghong&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"^-^","loop":false},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Ke's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/default_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="散列表（HashTable）">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-12-14 00:01" pubdate>
+        2020年12月14日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.4k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      18
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">散列表（HashTable）</h1>
+            
+            <div class="markdown-body">
+              <h1 id="散列"><a href="#散列" class="headerlink" title="散列"></a>散列</h1><ul>
+<li>散列是一种常用的数据存储结构，散列后的数据可以快速的<code>插入</code>、<code>删除</code>和<code>取用</code>。 </li>
+<li>散列使用的数据结构叫做<code>散列表</code>。</li>
+<li>散列的<code>查找效率很低</code>。<br>总上描述，散列的特点有点类似于<code>链表</code>。</li>
+</ul>
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><ol>
+<li>散列表存储数据时，通过一个<code>散列函数</code>将<code>键</code>映射为一个数字，这个数字的范围是0-散列表的长度。</li>
+<li>理想情况下，散列函数会将每个键值映射为一个唯一的数组索引，然而，键的数量是无限的，数组的长度<br>是有限的。两个键映射成同一个值的现象称为<code>碰撞</code>。</li>
+<li>散列表是基于数组去实现的，数组的长度应该是一个<code>质数</code>，为何？</li>
+</ol>
+<ul>
+<li>计算数组下标的时候是<code>取余运算</code>，确保散列表中用来存储数据的<code>数组大小是一个质数可以避免发生碰撞</code>。</li>
+<li>数组的长度应该在100以上，这样可以保证散列表中的数据分布的更均匀。</li>
+<li>霍纳算法，散列函数的处理字符串数据，先计算字符串中的ASCII，然后乘以一个较小的质数。</li>
+</ul>
+<p>核心：散列函数和碰撞处理（开链法和线性探测法）</p>
+<h2 id="HashTable"><a href="#HashTable" class="headerlink" title="HashTable"></a>HashTable</h2><pre><code class="hljs js"><span class="hljs-comment">// 构造函数</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">HashTable</span>(<span class="hljs-params"></span>)</span>&#123;
+  <span class="hljs-built_in">this</span>.table = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(<span class="hljs-number">137</span>);
+  <span class="hljs-built_in">this</span>.simpleHash = simpleHash;
+  <span class="hljs-built_in">this</span>.showDistro = showDistro;
+  <span class="hljs-built_in">this</span>.put = put;
+  <span class="hljs-built_in">this</span>.get = get;
+  <span class="hljs-built_in">this</span>.values = [];<span class="hljs-comment">//为线性探测法使用</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showDistro</span>(<span class="hljs-params"></span>)</span>&#123;
+  <span class="hljs-keyword">let</span> n = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">this</span>.table.length; i++)&#123;
+    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">this</span>.table[i] != <span class="hljs-literal">undefined</span>)&#123;
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;i=&quot;</span> +  <span class="hljs-built_in">this</span>.table[i]);
+    &#125;
+  &#125;
+&#125;
+</code></pre>
+<p>选择一个<code>散列函数</code>。</p>
+<ul>
+<li>如果<code>键</code>是<code>整形</code>，最简单的<code>散列函数是以数组的长度对键值取余</code>。这种散列方式称为<code>除留余数法</code>。</li>
+</ul>
+<p><strong>简单的散列函数</strong></p>
+<pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">simpleHash</span>(<span class="hljs-params">string</span>)</span>&#123; <span class="hljs-comment">// 依然会发生碰撞</span>
+  <span class="hljs-keyword">let</span> total = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; string.length; i++)&#123;
+    total += string.charCodeAt(i);
+  &#125;
+  <span class="hljs-keyword">return</span> total % <span class="hljs-built_in">this</span>.table.length;
+&#125;</code></pre>
+<p>运行以下示例，依然会发生碰撞。</p>
+<pre><code class="hljs js"><span class="hljs-keyword">var</span> someNames = [<span class="hljs-string">&#x27;David&#x27;</span>, <span class="hljs-string">&#x27;Jennifer&#x27;</span>, <span class="hljs-string">&#x27;Donnie&#x27;</span>, <span class="hljs-string">&#x27;Raymond&#x27;</span>,
+ <span class="hljs-string">&#x27;Cynthia&#x27;</span>, <span class="hljs-string">&#x27;Mike&#x27;</span>, <span class="hljs-string">&#x27;Claython&#x27;</span>, <span class="hljs-string">&#x27;Danny&#x27;</span>, <span class="hljs-string">&#x27;Jonathan&#x27;</span>];</code></pre>
+
+<p><strong>使用霍纳算法后的散列函数</strong></p>
+<pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">betterHash</span>(<span class="hljs-params">string, arr</span>)</span>&#123;
+  <span class="hljs-keyword">let</span> total = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">const</span> H = <span class="hljs-number">37</span>;
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; string.length; i++)&#123;
+    total += H * total + string.charCodeAt(i);
+  &#125;
+  <span class="hljs-keyword">return</span> total % arr.length;
+&#125;</code></pre>
+
+<h2 id="散列表的碰撞处理"><a href="#散列表的碰撞处理" class="headerlink" title="散列表的碰撞处理"></a>散列表的碰撞处理</h2><ol>
+<li>开链法<blockquote>
+<p>开链法是指实现散列表的底层数组中，每个数组元素又是一个新的数据结构，比如另一个数组，这样就可以存储多个键了。<br>使用二维数组进行存储。<br>比如 a 散列之后的 index = 0， b散列之后的 index 也是 0，那么可以把a.data 存储在 二维数组的[0][0]位置，<br>b存储在数组[0][1]的位置。</p>
+</blockquote>
+</li>
+</ol>
+<pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">put</span>(<span class="hljs-params">key, data</span>)</span>&#123;
+  <span class="hljs-keyword">let</span> index = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> pos = <span class="hljs-built_in">this</span>.betterHash(key);
+  <span class="hljs-comment">// key，data存储的位置相隔 1</span>
+  <span class="hljs-keyword">if</span>(<span class="hljs-built_in">this</span>.table[pos][index] == <span class="hljs-literal">undefined</span>)&#123;
+    <span class="hljs-built_in">this</span>.table[pos][index+<span class="hljs-number">1</span>] = data;
+    ++index;
+  &#125; <span class="hljs-keyword">else</span> &#123;
+    <span class="hljs-keyword">while</span>(<span class="hljs-built_in">this</span>.table[pos][index] != <span class="hljs-literal">undefined</span>)&#123;
+      ++index;
+    &#125;
+    <span class="hljs-built_in">this</span>.table[pos][index+<span class="hljs-number">1</span>] = data;
+  &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get</span>(<span class="hljs-params">key</span>)</span>&#123;
+  <span class="hljs-keyword">let</span> index = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> pos = <span class="hljs-built_in">this</span>.betteHash(key);
+  <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.table[pos][index] == key) &#123; <span class="hljs-comment">// 找到对应的key</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.table[pos][index+<span class="hljs-number">1</span>]; <span class="hljs-comment">// 返回data</span>
+  &#125; <span class="hljs-keyword">else</span> &#123;
+    <span class="hljs-keyword">while</span>(<span class="hljs-built_in">this</span>.table[pos][index] != key)&#123;
+      index+=<span class="hljs-number">2</span>;
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.table[pos][index+<span class="hljs-number">1</span>];
+  &#125;
+  
+&#125;</code></pre>
+<ol start="2">
+<li>线性探测法<br><code>线性探测法</code>又叫做<code>开放寻址散列</code>。其原理是当发生碰撞时，线性探测法检测列表中的下一个位置是否为空。如果<br>为空，就将数据存入该位置，如果不为空，则继续检查下一个位置，直到找到一个空的位置为止。该技术基于这样<br>一个事实：<code>每个散列表都会有很多空的单元格，可以使用它们来存储数据</code>。</li>
+</ol>
+<p><strong>开链法和线性探测法的选择方法</strong></p>
+<ul>
+<li>如果数组的大小是待存储数据个数的1.5倍，那么使用<code>开链法</code>。</li>
+<li>如果数组的大小是待存储数据的两倍及两倍以上时，则使用<code>线性探测法</code>。</li>
+</ul>
+<p>使用<code>线性探测法</code>重写<code>put</code>、<code>get</code>。</p>
+<pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">put</span>(<span class="hljs-params">key, data</span>) </span>&#123;
+  <span class="hljs-keyword">var</span> pos = <span class="hljs-built_in">this</span>.betterHash(key);
+  <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.table[pos] == <span class="hljs-literal">undefined</span>) &#123;
+    <span class="hljs-built_in">this</span>.table[pos] = key;
+    <span class="hljs-built_in">this</span>.values[pos] = data;
+  &#125; <span class="hljs-keyword">else</span> &#123;
+    <span class="hljs-keyword">while</span>(<span class="hljs-built_in">this</span>.table[pos] !== <span class="hljs-literal">undefined</span>)&#123;
+      pos++;
+    &#125;
+    <span class="hljs-built_in">this</span>.table[pos] = key;
+    <span class="hljs-built_in">this</span>.values[pos] = data;
+  &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get</span>(<span class="hljs-params">key</span>) </span>&#123;
+  <span class="hljs-keyword">var</span> hash = -<span class="hljs-number">1</span>;
+  hash = <span class="hljs-built_in">this</span>.betterHash(key);
+  <span class="hljs-keyword">if</span> (hash &gt; -<span class="hljs-number">1</span>) &#123;
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i = hash; i &lt; <span class="hljs-built_in">this</span>.table.length; i++) &#123;
+      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.table[hash] == key) &#123;
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.values[hash];
+      &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>;
+  &#125;
+&#125;</code></pre>
+
+<p><strong>散列完整版代码实现</strong></p>
+<pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">HashTable</span>(<span class="hljs-params"></span>) </span>&#123;
+  <span class="hljs-built_in">this</span>.table = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(<span class="hljs-number">137</span>); <span class="hljs-comment">// 存储数据的数组</span>
+  <span class="hljs-built_in">this</span>.betterHash = betterHash; <span class="hljs-comment">// 以字符串为键</span>
+  <span class="hljs-built_in">this</span>.simpleHash = simpleHash; <span class="hljs-comment">// 以数子为键</span>
+  <span class="hljs-built_in">this</span>.put = put; <span class="hljs-comment">// 存入</span>
+  <span class="hljs-built_in">this</span>.get = get; <span class="hljs-comment">// 读取</span>
+  <span class="hljs-built_in">this</span>.values = [];
+&#125;
+
+<span class="hljs-comment">// 使用字符的ASCII作为计算的基础</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">simpleHash</span>(<span class="hljs-params">data</span>) </span>&#123;
+  <span class="hljs-keyword">let</span> total = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; data.length; i++) &#123;
+    total += data.charCodeAt(i);
+  &#125;
+  <span class="hljs-keyword">return</span> total % <span class="hljs-built_in">this</span>.table.length;
+&#125;
+
+<span class="hljs-comment">// 减少碰撞的发生</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">betterHash</span>(<span class="hljs-params">string, arr</span>) </span>&#123;
+  <span class="hljs-keyword">const</span> H = <span class="hljs-number">37</span>;
+  <span class="hljs-keyword">let</span> total = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; string.length; i++) &#123;
+    total += H * total + string.charCodeAt(i);
+  &#125;
+  total = total % arr.length; <span class="hljs-comment">// 这里的arr指的是this.table</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">parseInt</span>(total);
+&#125;
+
+<span class="hljs-comment">// put,get 开链法,二维数组, index =&gt; key, inde+1 =&gt; data</span>
+
+<span class="hljs-comment">// put,get 线性探测法,关键点直到找到一个为空的</span>
+</code></pre>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>散列</code>的实现原理，使用数组存储数据假定为<code>array</code>，而存储的下标通过一个散列函数计算得出假定为<code>index</code>。<br>如果是以字符串为key进行散列计算。数据下标很容易发生重复，为了解决重复可以使用开链法和线性探测法（开放寻址散列）。<br>使用<code>array[index]</code>存储<code>data</code>。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/12/14/Queue/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">队列</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/12/14/Dictionary/">
+                        <span class="hidden-mobile">字典</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="http://www.kelinghong.com" target="_blank" rel="nofollow noopener"><span>Ryan.ke</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/kelh93" target="_blank" rel="nofollow noopener"><span>GitHub</span></a> 
+  </div>
+  
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <a href="http://beian.miit.gov.cn/" target="_blank"
+       rel="nofollow noopener">网站备案</a>
+    
+      
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=2020127833"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" alt="police-icon"/>
+          
+          <span>粤ICP备2020127833号</span>
+        </a>
+      
+    
+  </div>
+
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.start()
+    document.addEventListener('DOMContentLoaded', function() {
+      window.NProgress && window.NProgress.inc();
+    })
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

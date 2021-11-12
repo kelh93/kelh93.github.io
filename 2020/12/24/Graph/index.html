@@ -1,0 +1,682 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="ryan.ke">
+  <meta name="keywords" content="">
+  <title>图和图算法 - Kelinghong&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"^-^","loop":false},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Ke's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/default_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="图和图算法">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-12-24 00:43" pubdate>
+        2020年12月24日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.8k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      24
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">图和图算法</h1>
+            
+            <div class="markdown-body">
+              <h1 id="图"><a href="#图" class="headerlink" title="图"></a>图</h1><ol>
+<li><p>图的定义<br><code>图</code>由<code>边</code>的集合及<code>顶点</code>的集合组成。<code>顶点</code>也有权重，也称为<code>成本</code>。<br>如果一个图的顶点是有序的，则可以称之为<code>有向图</code>。在对有向图的顶点对排序后，便可以在两个顶点之间绘制一个箭头。有向图表明了顶点的流向。如果图是无序的，则称之为<code>无序图</code>或<code>无向图</code>。</p>
+</li>
+<li><p><code>图</code>中的一系列顶点构成<code>路径</code>，路径中的所有顶点都由边连接。</p>
+</li>
+<li><p><code>路径的长度</code>用路径中<code>第一个顶点</code>到<code>最后一个顶点</code>之间的<code>边的数量</code>表示。</p>
+</li>
+<li><p>由<code>指向自身的顶点</code>组成的路径称为<code>环</code>，环的长度为0.</p>
+</li>
+</ol>
+<h2 id="图：由顶点和边构建"><a href="#图：由顶点和边构建" class="headerlink" title="图：由顶点和边构建"></a>图：由顶点和边构建</h2><h3 id="顶点"><a href="#顶点" class="headerlink" title="顶点"></a>顶点</h3><p>创建<code>Vertex</code>类保存顶点和边。这个类的作用与<a target="_blank" rel="noopener" href="http://www.kelinghong.com/2020/12/11/linkedlist/">链表</a>和<a target="_blank" rel="noopener" href="http://www.kelinghong.com/2020/12/20/BST/">二叉查找树</a>的Node类一样。</p>
+<pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Vertex</span>(<span class="hljs-params">label, wasVisited</span>)</span>&#123;
+  <span class="hljs-built_in">this</span>.label = label; <span class="hljs-comment">// 顶点</span>
+  <span class="hljs-built_in">this</span>.wasVisited = wasVisited; <span class="hljs-comment">// 顶点是否被访问过(也就是是否被遍历过)</span>
+&#125;</code></pre>
+
+<h3 id="边"><a href="#边" class="headerlink" title="边"></a>边</h3><p>我们将表示图的<code>边</code>的方法称为<code>邻接表</code>或者<code>邻接表数组</code>。这种方法将边存储为由顶点的相邻顶点列表构成的数组，并以此顶点作为索引。<br>另一种表示图边的方法被称为<code>邻接矩阵</code>。它是一个<code>二维数组</code>，其中的元素表示两个顶点之间是否有一条边。  </p>
+<h2 id="构建图"><a href="#构建图" class="headerlink" title="构建图"></a>构建图</h2><pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Graph</span>(<span class="hljs-params">v</span>)</span>&#123;
+  <span class="hljs-built_in">this</span>.vertices = <span class="hljs-number">0</span>;
+  <span class="hljs-built_in">this</span>.edges = <span class="hljs-number">0</span>;
+  <span class="hljs-built_in">this</span>.adj = [];
+  <span class="hljs-comment">// 构建二维数组this.adj,保存所有相邻顶点。</span>
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>;i &lt; <span class="hljs-built_in">this</span>.vertices.length;i++)&#123;
+    <span class="hljs-built_in">this</span>.adj[i] = [];
+    <span class="hljs-built_in">this</span>.adj[i].push(<span class="hljs-string">&#x27;&#x27;</span>);
+  &#125;
+  <span class="hljs-built_in">this</span>.addEdge = addEdge;
+  <span class="hljs-built_in">this</span>.toString = toString.
+&#125;
+
+<span class="hljs-comment">// 调用函数传入顶点A和B，函数先查找顶点A的邻接表，将顶点B添加到列表中。</span>
+<span class="hljs-comment">// 然后再查找B的邻接表，将顶点A加入列表，最后这个函数的边数量加1。</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addEdge</span>(<span class="hljs-params">v, w</span>)</span>&#123;
+  <span class="hljs-built_in">this</span>.adj[v].push(w);
+  <span class="hljs-built_in">this</span>.adj[w].push(v);
+  <span class="hljs-built_in">this</span>.edges++;
+&#125;
+
+<span class="hljs-comment">// 相当于遍历图的`边`和`列`</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showGraph</span>(<span class="hljs-params"></span>)</span>&#123;
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">this</span>.vertices; i++)&#123;
+    <span class="hljs-built_in">console</span>.log(i + <span class="hljs-string">&#x27;-&gt;&#x27;</span>);
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-built_in">this</span>.vertices; ++j)&#123;
+      <span class="hljs-keyword">if</span>(<span class="hljs-built_in">this</span>.adj[i][j] != <span class="hljs-literal">undefined</span>)&#123;
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">this</span>.adj[i][j] + <span class="hljs-string">&#x27;&#x27;</span>);
+      &#125;
+    &#125;
+  &#125;
+&#125;</code></pre>
+
+<h2 id="搜索图"><a href="#搜索图" class="headerlink" title="搜索图"></a>搜索图</h2><h3 id="1-DFS-深度优先搜索"><a href="#1-DFS-深度优先搜索" class="headerlink" title="1. DFS (深度优先搜索)"></a>1. DFS (深度优先搜索)</h3><p><code>深度优先搜索</code>包括从一条路径的<code>起始顶点开始追溯，直到到达最后一个顶点</code>，然后回溯，继续追溯下一条路径，直到到达最后的顶点。如此往复，直到没有路径为止。这不是在搜索特定的路径，而是通过搜索来查看在图中有哪些路径可以选择。<br>深度优先搜索的算法比较简单：访问一个没有访问过的顶点，将它标记为以访问，再递归的去访问在初始顶点的邻接表中其他没有访问过的顶点。</p>
+<blockquote>
+<p>总结：DFS搜索方式是<code>纵向遍历</code>。</p>
+</blockquote>
+<pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Graph</span>(<span class="hljs-params">v</span>)</span>&#123;
+  <span class="hljs-built_in">this</span>.vertices = v;
+  <span class="hljs-built_in">this</span>.edges = <span class="hljs-number">0</span>;
+  <span class="hljs-built_in">this</span>.adj = []; <span class="hljs-comment">// 创建图的二维数组</span>
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">this</span>.vertices;i++)&#123;
+    <span class="hljs-built_in">this</span>.adj[i] = [];
+    <span class="hljs-built_in">this</span>.adj[i].push(<span class="hljs-string">&#x27;&#x27;</span>);
+  &#125;
+  <span class="hljs-built_in">this</span>.addEdge = addEdge;
+  <span class="hljs-built_in">this</span>.showGraph = showGraph;
+  <span class="hljs-built_in">this</span>.dfs = dfs;
+  <span class="hljs-built_in">this</span>.marked = [];
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>;i &lt; <span class="hljs-built_in">this</span>.vertices; i++)&#123;
+    <span class="hljs-built_in">this</span>.marked[i] = <span class="hljs-literal">false</span>;
+  &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addEdge</span>(<span class="hljs-params">v, w</span>) </span>&#123;
+  <span class="hljs-built_in">this</span>.adj[v].push(w);
+  <span class="hljs-built_in">this</span>.adj[w].push(v);
+  <span class="hljs-built_in">this</span>.edges++;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showGraph</span>(<span class="hljs-params"></span>)</span>&#123;
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">this</span>.adj; ++i)&#123;
+    <span class="hljs-built_in">console</span>.log(i + <span class="hljs-string">&#x27;-&gt;&#x27;</span>);
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-built_in">this</span>.adj[i]; ++i)&#123;
+      <span class="hljs-keyword">if</span>(<span class="hljs-built_in">this</span>.adj[i][j] != <span class="hljs-literal">undefined</span>)&#123;
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">this</span>.add[i][j] + <span class="hljs-string">&#x27; &#x27;</span>);
+      &#125;
+    &#125;
+  &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dfs</span>(<span class="hljs-params">v</span>)</span>&#123;
+  <span class="hljs-built_in">this</span>.marked[v] = <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">if</span>(<span class="hljs-built_in">this</span>.adj[v] != <span class="hljs-literal">undefined</span>)&#123;
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;visited vertex:&#x27;</span> + v);
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> w <span class="hljs-keyword">in</span> <span class="hljs-built_in">this</span>.adj[v])&#123;
+      <span class="hljs-keyword">if</span>(!<span class="hljs-built_in">this</span>.marked[w])&#123;
+        <span class="hljs-built_in">this</span>.dfs(w);
+      &#125;
+    &#125;
+  &#125;
+&#125;
+
+<span class="hljs-comment">// 测试dfs</span>
+<span class="hljs-keyword">let</span> g = <span class="hljs-keyword">new</span> Graph(<span class="hljs-number">5</span>); <span class="hljs-comment">// [[],[],[],[],[]]</span>
+<span class="hljs-comment">// this.adj[0].push(1);</span>
+<span class="hljs-comment">// this.adj[1].push(0);</span>
+g.addEdge(<span class="hljs-number">0</span>,<span class="hljs-number">1</span>); <span class="hljs-comment">// [[1],[0],[],[],[]]</span>
+g.addEdge(<span class="hljs-number">0</span>,<span class="hljs-number">2</span>); <span class="hljs-comment">// [[1,2],[0],[0],[],[]]</span>
+g.addEdge(<span class="hljs-number">1</span>,<span class="hljs-number">3</span>); <span class="hljs-comment">// [[1,2],[0,3],[0],[1],[]]</span>
+g.addEdge(<span class="hljs-number">2</span>,<span class="hljs-number">4</span>); <span class="hljs-comment">// [[1,2],[0,3],[0,4],[1],[2]]</span>
+g.showGraph(); <span class="hljs-comment">// 1,2 0,3 0,4 1, 2</span>
+g.dfs(<span class="hljs-number">0</span>); <span class="hljs-comment">// 从this.adj[v], v=0开始遍历</span>
+
+<span class="hljs-comment">// 输出结果：</span>
+<span class="hljs-comment">// [[1,2],[0,3],[0,4],[1],[2]]</span>
+</code></pre>
+<h3 id="2-BFS-广度优先搜索"><a href="#2-BFS-广度优先搜索" class="headerlink" title="2. BFS (广度优先搜索)"></a>2. BFS (广度优先搜索)</h3><p><code>广度优先搜索</code>从第一个顶点开始，尝试访问尽可能靠近它的顶点。本质上，这种搜索在图上是<code>逐层移动</code>的，首先检查最靠近第一个顶点的层，再逐渐<code>向下移动</code>到离起始顶点最远的层。</p>
+<blockquote>
+<p>总结：<code>BFS</code>的搜索方式是<code>横向搜索</code>，就近原则遍历。</p>
+</blockquote>
+<p>广度优先搜索算法使用了<code>抽象的队列</code>而不是数组来对<code>已访问过的顶点进行排序</code>。其算法的工作原理如下：  </p>
+<ol>
+<li>查找与当前顶点相邻的未访问顶点，将其添加到已访问顶点列表及队列中。</li>
+<li>从图中取出下一个顶点v，添加到已访问的顶点列表。</li>
+<li>将所有与v相邻的未访问顶点添加到队列。 </li>
+</ol>
+<pre><code class="hljs js"><span class="hljs-comment">// 广度优先搜索的遍历过程</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bfs</span>(<span class="hljs-params">s</span>)</span>&#123;
+  <span class="hljs-keyword">var</span> queue = [];
+  <span class="hljs-built_in">this</span>.marked[s] = <span class="hljs-literal">true</span>;
+  queue.push(s); <span class="hljs-comment">// 添加到队尾</span>
+  <span class="hljs-keyword">while</span>(queue.length &gt; <span class="hljs-number">0</span>)&#123;
+    <span class="hljs-keyword">var</span> v = queue.shift(); <span class="hljs-comment">// 从队首移除</span>
+    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">this</span>.adj[v] != <span class="hljs-literal">undefined</span>)&#123;
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;已访问过的顶点：&#x27;</span>, v);
+    &#125;
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> w <span class="hljs-keyword">in</span> <span class="hljs-built_in">this</span>.adj[v])&#123;
+      <span class="hljs-keyword">if</span>(!<span class="hljs-built_in">this</span>.marked[w])&#123;
+        <span class="hljs-built_in">this</span>.marked[w] = <span class="hljs-literal">true</span>;
+        queue.push(w);
+      &#125;
+    &#125;
+  &#125;
+&#125;
+<span class="hljs-comment">// 测试：</span>
+<span class="hljs-keyword">var</span> g = <span class="hljs-keyword">new</span> Graph(<span class="hljs-number">5</span>);
+g.addEdge(<span class="hljs-number">0</span>,<span class="hljs-number">1</span>);
+g.addEdge(<span class="hljs-number">0</span>,<span class="hljs-number">2</span>);
+g.addEdge(<span class="hljs-number">1</span>,<span class="hljs-number">3</span>);
+g.addEdge(<span class="hljs-number">2</span>,<span class="hljs-number">4</span>);
+g.showGraph();
+g.bfs(<span class="hljs-number">0</span>);
+</code></pre>
+<h4 id="广度优先搜索-查找最短路径"><a href="#广度优先搜索-查找最短路径" class="headerlink" title="广度优先搜索-查找最短路径"></a>广度优先搜索-查找最短路径</h4><p>要查找最短路径，需要修改广度优先搜索算法来记录从一个顶点到另一个顶点的路径。这需要对Graph类做一些修改。<br>首先，需要一个数组来保存从一个顶点到下一个顶点的所有边。我们将这个数组命名为 edgeTo。因为从始至终使用的都是广度优先搜索函数，所以每次都会遇到一个没有标记的顶点，除了对它进行标记外，还会从邻接列表中我们正在探索的那个顶点添加一条边到这个顶点。  </p>
+<pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Graph</span>(<span class="hljs-params"></span>)</span>&#123;
+  <span class="hljs-built_in">this</span>.edgeTo = edgeTo;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bfs</span>(<span class="hljs-params">s</span>)</span>&#123;
+  <span class="hljs-keyword">var</span> queue = [];
+  <span class="hljs-built_in">this</span>.marked[s] = <span class="hljs-literal">true</span>;
+  queue.push(s);
+  <span class="hljs-keyword">while</span>(queue.length &gt; <span class="hljs-number">0</span>)&#123;
+    <span class="hljs-keyword">var</span> v = queue.shift();
+    <span class="hljs-keyword">if</span>(v == <span class="hljs-literal">undefined</span>)&#123;
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;已经访问过的顶点&#x27;</span>, v);
+    &#125;
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> w <span class="hljs-keyword">in</span> <span class="hljs-built_in">this</span>.adj[v])&#123;
+      <span class="hljs-keyword">if</span>(!<span class="hljs-built_in">this</span>.marked[w])&#123;
+        <span class="hljs-built_in">this</span>.edgeTo[w] = v;
+        <span class="hljs-built_in">this</span>.marked[w] = <span class="hljs-literal">true</span>;
+        queue.push(w);
+      &#125;
+    &#125;
+  &#125;
+&#125;</code></pre>
+<p>新增一个函数用于展示图中连接到不同顶点的路径，创建函数<code>pathTo</code>用来存储与指定顶点有共同边的所有顶点。</p>
+<pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Graph</span>(<span class="hljs-params"></span>)</span>&#123;
+  <span class="hljs-built_in">this</span>.edgeTo = edgeTo;
+  <span class="hljs-built_in">this</span>.pathTo = pathTo;
+  <span class="hljs-built_in">this</span>.hasPathTo = hasPathTo;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">pathTo</span>(<span class="hljs-params">v</span>)</span>&#123;
+  <span class="hljs-keyword">var</span> source = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">if</span>(!<span class="hljs-built_in">this</span>.hasPathTo(v))&#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>;
+  &#125;
+  <span class="hljs-keyword">var</span> path = [];
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i = v; i != source; i = <span class="hljs-built_in">this</span>.edgeTo[i])&#123;
+    path.push(i);
+  &#125;
+  path.push(source);
+  <span class="hljs-keyword">return</span> path;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">hasPathTo</span>(<span class="hljs-params">v</span>)</span>&#123;
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.marked[v];
+&#125;</code></pre>
+<p>测试程序: 顶点0-4的最短路径</p>
+<pre><code class="hljs js"><span class="hljs-keyword">var</span> g = <span class="hljs-keyword">new</span> Graph(<span class="hljs-number">5</span>);
+g.bfs(<span class="hljs-number">0</span>);
+g.addEdge(<span class="hljs-number">0</span>,<span class="hljs-number">1</span>);
+g.addEdge(<span class="hljs-number">0</span>,<span class="hljs-number">2</span>);
+g.addEdge(<span class="hljs-number">1</span>,<span class="hljs-number">3</span>);
+g.addEdge(<span class="hljs-number">2</span>,<span class="hljs-number">4</span>);
+<span class="hljs-keyword">var</span> vertex = <span class="hljs-number">4</span>;
+<span class="hljs-keyword">var</span> paths = g.pathTo(vertex);
+<span class="hljs-keyword">var</span> pathStr = <span class="hljs-string">&#x27;&#x27;</span>;
+<span class="hljs-keyword">while</span>(paths.length &gt; <span class="hljs-number">0</span>)&#123;
+  <span class="hljs-keyword">if</span>(paths.length &gt; <span class="hljs-number">1</span>)&#123;
+    pathStr = paths.pop() + <span class="hljs-string">&#x27;-&#x27;</span>;
+  &#125; <span class="hljs-keyword">else</span> &#123;
+    pathStr += paths.pop();
+  &#125;
+&#125;
+<span class="hljs-built_in">console</span>.log(pathStr); <span class="hljs-comment">// 0-2-4</span></code></pre>
+
+<h4 id="拓扑排序-TopSort"><a href="#拓扑排序-TopSort" class="headerlink" title="拓扑排序 (TopSort)"></a>拓扑排序 (TopSort)</h4>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/01/15/function-overloading/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">如何实现函数重载</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/12/20/BST/">
+                        <span class="hidden-mobile">二叉树</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="http://www.kelinghong.com" target="_blank" rel="nofollow noopener"><span>Ryan.ke</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/kelh93" target="_blank" rel="nofollow noopener"><span>GitHub</span></a> 
+  </div>
+  
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <a href="http://beian.miit.gov.cn/" target="_blank"
+       rel="nofollow noopener">网站备案</a>
+    
+      
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=2020127833"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" alt="police-icon"/>
+          
+          <span>粤ICP备2020127833号</span>
+        </a>
+      
+    
+  </div>
+
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.start()
+    document.addEventListener('DOMContentLoaded', function() {
+      window.NProgress && window.NProgress.inc();
+    })
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

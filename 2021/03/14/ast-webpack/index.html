@@ -1,0 +1,611 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="ryan.ke">
+  <meta name="keywords" content="">
+  <title>基于AST实现一个简易的webpack - Kelinghong&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"^-^","loop":false},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Ke's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/default_bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="基于AST实现一个简易的webpack">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-03-14 07:24" pubdate>
+        2021年3月14日 早上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      759 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      13
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">基于AST实现一个简易的webpack</h1>
+            
+            <div class="markdown-body">
+              <h2 id="学习目标"><a href="#学习目标" class="headerlink" title="学习目标"></a>学习目标</h2><ul>
+<li>了解webpack如何实现commonjs规范。</li>
+<li>分析webpack打包后生成的文件</li>
+<li>基于AST实现webpack打包js文件。  <blockquote>
+<p>运行环境：<br>nodejs：v10.15.3<br>webpack：4.26.0<br>webpack-cli： 3.3.12  </p>
+</blockquote>
+<h2 id="分析webpack打包结果"><a href="#分析webpack打包结果" class="headerlink" title="分析webpack打包结果"></a>分析webpack打包结果</h2>打包的结果是一个闭包，参数就是模块的依赖对象（也可以是数组），key为文件的路径，value是一个function,模块内部代码使用function进行包裹。  <h2 id="了解webpack如何实现commonjs规范"><a href="#了解webpack如何实现commonjs规范" class="headerlink" title="了解webpack如何实现commonjs规范"></a>了解webpack如何实现commonjs规范</h2></li>
+</ul>
+<ol>
+<li>使用__webpack_require__代替require</li>
+<li>__webpack_require__内部构造出module.exports,记录模块的导出内容。  </li>
+</ol>
+<pre><code class="hljs js">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__webpack_require__</span>(<span class="hljs-params">moduleId</span>)</span>&#123;
+    <span class="hljs-keyword">var</span> <span class="hljs-built_in">module</span> = (installedModules[moduleId] = &#123;
+      i: moduleId,
+      l: <span class="hljs-literal">false</span>,
+      <span class="hljs-built_in">exports</span>: &#123;&#125;,
+    &#125;);
+    <span class="hljs-comment">//调用挂载的function，开始运行程序</span>
+    modules[moduleId].call(<span class="hljs-built_in">module</span>.exports, <span class="hljs-built_in">module</span>, <span class="hljs-built_in">module</span>.exports, __webpack_require__);
+    <span class="hljs-comment">//返回模块导出的内容。</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">module</span>.exports;
+&#125;</code></pre>
+<h2 id="提取webpack的Template模板"><a href="#提取webpack的Template模板" class="headerlink" title="提取webpack的Template模板"></a>提取webpack的Template模板</h2><pre><code class="hljs js">  (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">modules</span>) </span>&#123;
+  <span class="hljs-comment">// webpackBootstrap</span>
+  <span class="hljs-comment">// 模块缓存</span>
+  <span class="hljs-keyword">var</span> installedModules = &#123;&#125;;
+
+  <span class="hljs-comment">// The require function</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__webpack_require__</span>(<span class="hljs-params">moduleId</span>) </span>&#123;
+    <span class="hljs-comment">// Check if module is in cache</span>
+    <span class="hljs-keyword">if</span> (installedModules[moduleId]) &#123;
+      <span class="hljs-keyword">return</span> installedModules[moduleId].exports;
+    &#125;
+    <span class="hljs-comment">// Create a new module (and put it into the cache)</span>
+    <span class="hljs-keyword">var</span> <span class="hljs-built_in">module</span> = (installedModules[moduleId] = &#123;
+      i: moduleId,
+      l: <span class="hljs-literal">false</span>,
+      <span class="hljs-built_in">exports</span>: &#123;&#125;,
+    &#125;);
+
+    <span class="hljs-comment">// Execute the module function</span>
+    modules[moduleId].call(<span class="hljs-built_in">module</span>.exports, <span class="hljs-built_in">module</span>, <span class="hljs-built_in">module</span>.exports, __webpack_require__);
+
+    <span class="hljs-comment">// Flag the module as loaded</span>
+    <span class="hljs-built_in">module</span>.l = <span class="hljs-literal">true</span>;
+
+    <span class="hljs-comment">// Return the exports of the module</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">module</span>.exports;
+  &#125;
+
+  <span class="hljs-comment">// Load entry module and return exports</span>
+  <span class="hljs-keyword">return</span> __webpack_require__((__webpack_require__.s = <span class="hljs-string">&#x27;./src/index.js&#x27;</span>));
+&#125;)(&#123;
+  <span class="hljs-string">&#x27;./src/index.js&#x27;</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"><span class="hljs-built_in">module</span>, __webpack_exports__, __webpack_require__</span>) </span>&#123;
+    <span class="hljs-comment">// &#x27;use strict&#x27;;</span>
+    <span class="hljs-keyword">var</span> _sync__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(<span class="hljs-string">&#x27;./src/sync.js&#x27;</span>);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;外部文件&#x27;</span>, _sync__WEBPACK_IMPORTED_MODULE_0__[<span class="hljs-string">&#x27;default&#x27;</span>]);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;simple-webpack&#x27;</span>);
+  &#125;,
+
+  <span class="hljs-string">&#x27;./src/sync.js&#x27;</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"><span class="hljs-built_in">module</span>, __webpack_exports__, __webpack_require__</span>) </span>&#123;
+    <span class="hljs-comment">// &#x27;use strict&#x27;;</span>
+    <span class="hljs-keyword">const</span> data = <span class="hljs-string">&#x27;test-data&#x27;</span>;
+    __webpack_exports__[<span class="hljs-string">&#x27;default&#x27;</span>] = data;
+  &#125;,
+&#125;);</code></pre>
+<h2 id="基于AST实现webpack打包功能"><a href="#基于AST实现webpack打包功能" class="headerlink" title="基于AST实现webpack打包功能"></a>基于AST实现webpack打包功能</h2><p>项目依赖</p>
+<pre><code class="hljs js"><span class="hljs-comment">//package.json</span>
+  <span class="hljs-string">&quot;dependencies&quot;</span>: &#123;
+    <span class="hljs-string">&quot;@babel/traverse&quot;</span>: <span class="hljs-string">&quot;^7.13.0&quot;</span>,
+    <span class="hljs-string">&quot;babylon&quot;</span>: <span class="hljs-string">&quot;^6.18.0&quot;</span>,
+    <span class="hljs-string">&quot;ejs&quot;</span>: <span class="hljs-string">&quot;^3.1.6&quot;</span>,
+    <span class="hljs-string">&quot;magic-string&quot;</span>: <span class="hljs-string">&quot;^0.25.7&quot;</span>,
+    <span class="hljs-string">&quot;webpack&quot;</span>: <span class="hljs-string">&quot;^4.26.0&quot;</span>,
+    <span class="hljs-string">&quot;webpack-cli&quot;</span>: <span class="hljs-string">&quot;^3.3.12&quot;</span>
+  &#125;</code></pre>
+<ol>
+<li>分析入口文件，读取文件内容。  <pre><code class="hljs js"><span class="hljs-keyword">const</span> entry = <span class="hljs-string">&#x27;./src/index.js&#x27;</span>;
+<span class="hljs-keyword">const</span> content = fs.readFileSync(filename, <span class="hljs-string">&#x27;utf-8&#x27;</span>);</code></pre></li>
+<li>代码转换为ast<pre><code class="hljs js"><span class="hljs-keyword">const</span> ast = babylon.parse(content, &#123;
+    sourceType: <span class="hljs-string">&#x27;module&#x27;</span>,
+&#125;);</code></pre></li>
+<li>遍历ast代码,替换<code>import</code> 和 <code>export</code> <pre><code class="hljs js">traverse(ast, &#123;
+  <span class="hljs-function"><span class="hljs-title">ExportDeclaration</span>(<span class="hljs-params">&#123; node &#125;</span>)</span> &#123;
+    <span class="hljs-keyword">const</span> &#123; start, end, declaration &#125; = node;
+    code.overwrite(start, end, <span class="hljs-string">`__webpack_exports__[&quot;default&quot;] = <span class="hljs-subst">$&#123;declaration.name&#125;</span>`</span>);
+  &#125;,
+  <span class="hljs-function"><span class="hljs-title">ImportDeclaration</span>(<span class="hljs-params">&#123; node &#125;</span>)</span> &#123;
+    <span class="hljs-keyword">const</span> &#123; start, end, specifiers, source &#125; = node;
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;node&#x27;</span>, node);
+    <span class="hljs-keyword">const</span> newfile = <span class="hljs-string">&#x27;./src/&#x27;</span> + join(source.value);
+    code.overwrite(start, end, <span class="hljs-string">`var <span class="hljs-subst">$&#123;specifiers[<span class="hljs-number">0</span>].local.name&#125;</span> = __webpack_require__(&quot;<span class="hljs-subst">$&#123;newfile&#125;</span>&quot;).default`</span>);
+    array.push(newfile);
+  &#125;,
+&#125;);</code></pre></li>
+<li>收集依赖  <pre><code class="hljs js"><span class="hljs-keyword">let</span> depencies = [];
+<span class="hljs-keyword">const</span> _code = code.toString();
+depencies.push(&#123;
+  filename,
+  _code,
+&#125;);</code></pre></li>
+<li>通过模板生成bundle.js文件内容,输出到文件.  <pre><code class="hljs js">  <span class="hljs-keyword">const</span> template = <span class="hljs-string">`</span>
+<span class="hljs-string">  (function (modules) &#123;</span>
+<span class="hljs-string">    // webpackBootstrap</span>
+<span class="hljs-string">    // The module cache</span>
+<span class="hljs-string">    var installedModules = &#123;&#125;;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    // The require function</span>
+<span class="hljs-string">    function __webpack_require__(moduleId) &#123;</span>
+<span class="hljs-string">      // Check if module is in cache</span>
+<span class="hljs-string">      if (installedModules[moduleId]) &#123;</span>
+<span class="hljs-string">        return installedModules[moduleId].exports;</span>
+<span class="hljs-string">      &#125;</span>
+<span class="hljs-string">      // Create a new module (and put it into the cache)</span>
+<span class="hljs-string">      var module = (installedModules[moduleId] = &#123;</span>
+<span class="hljs-string">        i: moduleId,</span>
+<span class="hljs-string">        l: false,</span>
+<span class="hljs-string">        exports: &#123;&#125;,</span>
+<span class="hljs-string">      &#125;);</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">      // Execute the module function</span>
+<span class="hljs-string">      modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">      // Flag the module as loaded</span>
+<span class="hljs-string">      module.l = true;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">      // Return the exports of the module</span>
+<span class="hljs-string">      return module.exports;</span>
+<span class="hljs-string">    &#125;</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">    // Load entry module and return exports</span>
+<span class="hljs-string">    return __webpack_require__((__webpack_require__.s = &#x27;./src/index.js&#x27;));</span>
+<span class="hljs-string">  &#125;)(&#123;</span>
+<span class="hljs-string">    &lt;% for(var i=0;i&lt;depencies.length;i++)&#123; %&gt;</span>
+<span class="hljs-string">      &quot;&lt;%- depencies[i][&quot;filename&quot;] %&gt;&quot;:(function(module, __webpack_exports__, __webpack_require__)&#123;</span>
+<span class="hljs-string">        &lt;%- depencies[i]._code%&gt;</span>
+<span class="hljs-string">      &#125;),</span>
+<span class="hljs-string">    &lt;% &#125;%&gt;</span>
+<span class="hljs-string">  &#125;);</span>
+<span class="hljs-string">`</span>;</code></pre>
+源代码查看请点击<a target="_blank" rel="noopener" href="https://github.com/kelh93/simple-webpack">这里</a>，欢迎star，谢谢。</li>
+</ol>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">前端工程化</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/webpack4-%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96-webpack/">webpack4 前端工程化 webpack</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/11/12/nodejs-start/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/02/19/webpack4vswebpack5/">
+                        <span class="hidden-mobile">从dist分析webpack4与webpack5</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="http://www.kelinghong.com" target="_blank" rel="nofollow noopener"><span>Ryan.ke</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/kelh93" target="_blank" rel="nofollow noopener"><span>GitHub</span></a> 
+  </div>
+  
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <a href="http://beian.miit.gov.cn/" target="_blank"
+       rel="nofollow noopener">网站备案</a>
+    
+      
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=2020127833"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" alt="police-icon"/>
+          
+          <span>粤ICP备2020127833号</span>
+        </a>
+      
+    
+  </div>
+
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.start()
+    document.addEventListener('DOMContentLoaded', function() {
+      window.NProgress && window.NProgress.inc();
+    })
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>
