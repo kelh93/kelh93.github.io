@@ -1,0 +1,1 @@
+import{_ as t,o as s,c as a,b as e,d as n}from"./app.15edff22.js";const r={},d=e("h1",{id:"designpatterns",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#designpatterns","aria-hidden":"true"},"#"),n(" designPatterns")],-1),c=[d];function o(i,_){return s(),a("div",null,c)}var l=t(r,[["render",o],["__file","designPatterns.html.vue"]]);export{l as default};

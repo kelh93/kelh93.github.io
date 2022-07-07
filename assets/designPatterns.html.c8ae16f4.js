@@ -1,0 +1,1 @@
+const t={key:"v-a4282216",path:"/architecture/designPatterns.html",title:"designPatterns",lang:"en-US",frontmatter:{},excerpt:"",headers:[],git:{},filePathRelative:"architecture/designPatterns.md"};export{t as data};
